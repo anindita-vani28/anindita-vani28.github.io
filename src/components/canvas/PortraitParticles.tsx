@@ -10,11 +10,17 @@ const FADE_FRACTION = 0.06;
 const SCATTER_RADIUS_MIN = 0.5;
 const SCATTER_RADIUS_MAX = 1.6;
 
+const EDGE_PARTICLE_COUNT = 180;
+const EDGE_OPACITY = 0.75;
+const EDGE_SPEED = 0.3;
+
 type ParticleField = {
   count: number;
   basePositions: Float32Array;
   scatterOffsets: Float32Array;
   colors: Float32Array;
+  edgePositions: Float32Array;
+  edgeColors: Float32Array;
 };
 
 function buildParticleField(imageData: ImageData): ParticleField {
@@ -33,15 +39,73 @@ function buildParticleField(imageData: ImageData): ParticleField {
 
       const nx = x / width;
       const ny = y / height;
-      base.push((nx - 0.5) * 2 * aspect, -(ny - 0.5) * 2, 0);
+      const px = (nx - 0.5) * 2 * aspect;
+      const py = -(ny - 0.5) * 2;
+      base.push(px, py, 0);
 
       const angle = Math.random() * Math.PI * 2;
       const radius =
         SCATTER_RADIUS_MIN + Math.random() * (SCATTER_RADIUS_MAX - SCATTER_RADIUS_MIN);
       scatter.push(Math.cos(angle) * radius, Math.sin(angle) * radius, (Math.random() - 0.5) * 1.2);
 
-      colors.push(data[i] / 255, data[i + 1] / 255, data[i + 2] / 255);
+      const r = data[i] / 255;
+      const g = data[i + 1] / 255;
+      const b = data[i + 2] / 255;
+      colors.push(r, g, b);
     }
+  }
+
+  // Edge detection: find pixels on the boundary where subject meets transparent background
+  const edgeCandidates: { x: number; y: number; z: number; r: number; g: number; b: number }[] = [];
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const i = (y * width + x) * 4;
+      const alpha = data[i + 3];
+
+      if (alpha >= ALPHA_CUTOFF) {
+        // Check if neighbors have lower alpha (on a boundary)
+        let isEdge = false;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const ni = ((y + dy) * width + (x + dx)) * 4;
+            const nAlpha = data[ni + 3];
+            if (nAlpha < ALPHA_CUTOFF) {
+              isEdge = true;
+              break;
+            }
+          }
+          if (isEdge) break;
+        }
+
+        if (isEdge) {
+          const nx = x / width;
+          const ny = y / height;
+          const px = (nx - 0.5) * 2 * aspect;
+          const py = -(ny - 0.5) * 2;
+          edgeCandidates.push({
+            x: px,
+            y: py,
+            z: (Math.random() - 0.5) * 0.2,
+            r: data[i] / 255,
+            g: data[i + 1] / 255,
+            b: data[i + 2] / 255,
+          });
+        }
+      }
+    }
+  }
+
+  // Sample EDGE_PARTICLE_COUNT particles from the edge, evenly spaced around the perimeter
+  const edgeBase: number[] = [];
+  const edgeColorArr: number[] = [];
+  const sampleCount = Math.min(EDGE_PARTICLE_COUNT, edgeCandidates.length);
+  const step = Math.max(1, Math.floor(edgeCandidates.length / sampleCount));
+  for (let n = 0; n < edgeCandidates.length; n += step) {
+    if (edgeBase.length / 3 >= sampleCount) break;
+    const p = edgeCandidates[n];
+    edgeBase.push(p.x, p.y, p.z);
+    edgeColorArr.push(p.r, p.g, p.b);
   }
 
   return {
@@ -49,6 +113,8 @@ function buildParticleField(imageData: ImageData): ParticleField {
     basePositions: new Float32Array(base),
     scatterOffsets: new Float32Array(scatter),
     colors: new Float32Array(colors),
+    edgePositions: new Float32Array(edgeBase),
+    edgeColors: new Float32Array(edgeColorArr),
   };
 }
 
@@ -94,14 +160,37 @@ export function PortraitParticles({
   const dotTexture = useMemo(() => createDotTexture(), []);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.PointsMaterial>(null);
+  const edgePointsRef = useRef<THREE.Points>(null);
+  const edgeMaterialRef = useRef<THREE.PointsMaterial>(null);
   const lastTrigger = useRef(0);
   const cycleStart = useRef<number | null>(null);
 
   /* eslint-disable react-hooks/immutability */
   useFrame((state) => {
-    if (!pointsRef.current || !materialRef.current || prefersReducedMotion) return;
-
     const t = state.clock.elapsedTime;
+
+    // Edge glow: particles flow continuously around the silhouette outline
+    if (!prefersReducedMotion && edgePointsRef.current && edgeMaterialRef.current) {
+      const edgePosAttr = edgePointsRef.current.geometry.getAttribute(
+        'position',
+      ) as THREE.BufferAttribute;
+      const edgeCount = field.edgePositions.length / 3;
+
+      // Offset each particle along the edge sequence based on time for continuous flow
+      const offset = (t * EDGE_SPEED) % 1;
+
+      for (let i = 0; i < edgeCount; i++) {
+        const idx = (i + Math.floor(offset * edgeCount)) % edgeCount;
+        const x = field.edgePositions[idx * 3];
+        const y = field.edgePositions[idx * 3 + 1];
+        const z = field.edgePositions[idx * 3 + 2];
+        edgePosAttr.setXYZ(i, x, y, z);
+      }
+      edgePosAttr.needsUpdate = true;
+      edgeMaterialRef.current.opacity = EDGE_OPACITY;
+    }
+
+    if (!pointsRef.current || !materialRef.current || prefersReducedMotion) return;
 
     if (trigger.current !== lastTrigger.current && cycleStart.current === null) {
       lastTrigger.current = trigger.current;
@@ -112,11 +201,6 @@ export function PortraitParticles({
 
     const progress = Math.min((t - cycleStart.current) / CYCLE_DURATION, 1);
     const scatterFactor = Math.sin(progress * Math.PI);
-    // A brief crossfade at each end of the cycle: particles take over from the
-    // crisp photo almost instantly when the explosion starts, and hand back to
-    // it just as fast once the picture has fully reformed — so the only thing
-    // ever shown at rest is the real, sharp photograph, never the particle
-    // approximation of it.
     const revealAmount = Math.min(
       1,
       Math.min(progress, 1 - progress) / FADE_FRACTION,
@@ -152,21 +236,40 @@ export function PortraitParticles({
   /* eslint-enable react-hooks/immutability */
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[livePositions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[field.colors, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        ref={materialRef}
-        map={dotTexture}
-        vertexColors
-        size={4}
-        transparent
-        opacity={0}
-        sizeAttenuation={false}
-        depthWrite={false}
-      />
-    </points>
+    <>
+      <points ref={edgePointsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[field.edgePositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[field.edgeColors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          ref={edgeMaterialRef}
+          map={dotTexture}
+          vertexColors
+          size={5}
+          transparent
+          opacity={prefersReducedMotion ? 0 : EDGE_OPACITY}
+          sizeAttenuation={false}
+          depthWrite={false}
+        />
+      </points>
+
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[livePositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[field.colors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          ref={materialRef}
+          map={dotTexture}
+          vertexColors
+          size={4}
+          transparent
+          opacity={0}
+          sizeAttenuation={false}
+          depthWrite={false}
+        />
+      </points>
+    </>
   );
 }
