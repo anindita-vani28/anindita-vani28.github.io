@@ -300,6 +300,7 @@ h2 {
 .portrait-stage {
   position: relative;
   width: min(100%, 34rem);
+  max-height: 72svh;
 }
 
 .portrait-stage__image {
@@ -308,6 +309,8 @@ h2 {
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.55));
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
 }
 
 .portrait-stage__particles {
