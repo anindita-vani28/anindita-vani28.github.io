@@ -10,9 +10,9 @@ const FADE_FRACTION = 0.06;
 const SCATTER_RADIUS_MIN = 0.5;
 const SCATTER_RADIUS_MAX = 1.6;
 
-const EDGE_PARTICLE_COUNT = 180;
-const EDGE_OPACITY = 0.75;
-const EDGE_SPEED = 0.3;
+const EDGE_PARTICLE_COUNT = 250;
+const EDGE_OPACITY = 0.9;
+const EDGE_SPEED = 1.2;
 
 type ParticleField = {
   count: number;
