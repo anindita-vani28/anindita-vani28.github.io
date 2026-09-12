@@ -1,10 +1,28 @@
-import { ArrowUpRightIcon } from '../ui/icons';
+import { GitHubIcon, LinkedInIcon, MailIcon } from '../ui/icons';
 
 const contactLinks = {
-  email: 'your-email@example.com', // Replace with Anindita's preferred email.
-  github: 'https://github.com/anindita-vani28',
-  linkedin: 'https://www.linkedin.com/in/your-profile', // Replace with Anindita's profile URL.
-};
+  github: {
+    label: 'GitHub',
+    value: '@anindita-vani28',
+    href: 'https://github.com/anindita-vani28',
+    icon: GitHubIcon,
+    external: true,
+  },
+  linkedin: {
+    label: 'LinkedIn',
+    value: 'anindita-bhowmik-rit',
+    href: 'https://www.linkedin.com/in/anindita-bhowmik-rit',
+    icon: LinkedInIcon,
+    external: true,
+  },
+  email: {
+    label: 'Email',
+    value: 'ab6126@g.rit.edu',
+    href: 'mailto:ab6126@g.rit.edu',
+    icon: MailIcon,
+    external: false,
+  },
+} as const;
 
 export function Contact() {
   return (
@@ -14,10 +32,10 @@ export function Contact() {
           <p className="eyebrow">04 / Contact</p>
           <h2>Let’s Connect</h2>
           <p className="section__copy">
-            I’m always open to connecting with students, developers, recruiters,
-            and people working in technology. Whether you’d like to discuss an
-            opportunity, collaborate on a project, or simply say hello, feel
-            free to reach out.
+            I’m always open to connecting with entrepreneurs, business leaders,
+            people in tech, developers, and recruiters. Whether you have an
+            opportunity, an idea, or simply want to talk technology, I’d love to
+            hear from you.
           </p>
           <p className="contact__availability">
             <span aria-hidden="true" />
@@ -27,39 +45,25 @@ export function Contact() {
         </div>
 
         <div className="contact__actions" aria-label="Contact options">
-          <p className="contact__prompt">Start a conversation</p>
-          <a
-            className="button button--primary contact__email"
-            href={`mailto:${contactLinks.email}`}
-            aria-label={`Send an email to ${contactLinks.email}`}
-          >
-            Send me an email
-            <ArrowUpRightIcon />
-          </a>
-          <span className="contact__placeholder">
-            Email placeholder—replace before publishing
-          </span>
+          <div className="contact__channels">
+            {Object.values(contactLinks).map((link) => {
+              const Icon = link.icon;
 
-          <div className="contact__socials">
-            <a
-              href={contactLinks.github}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Visit Anindita Bhowmik's GitHub profile"
-            >
-              <span>GitHub</span>
-              <ArrowUpRightIcon />
-            </a>
-            <a
-              href={contactLinks.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn profile placeholder"
-            >
-              <span>LinkedIn</span>
-              <small>add profile</small>
-              <ArrowUpRightIcon />
-            </a>
+              return (
+                <a
+                  className="contact-link"
+                  href={link.href}
+                  target={link.external ? '_blank' : undefined}
+                  rel={link.external ? 'noreferrer' : undefined}
+                  aria-label={`${link.label}: ${link.value}`}
+                  data-label={link.label}
+                  title={`${link.label}: ${link.value}`}
+                  key={link.label}
+                >
+                  <Icon />
+                </a>
+              );
+            })}
           </div>
         </div>
 

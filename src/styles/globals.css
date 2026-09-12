@@ -1581,70 +1581,77 @@ h2 {
 }
 
 .contact__actions {
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--line);
-  border-radius: 1.25rem;
-  background: rgba(18, 19, 28, 0.72);
+  padding-bottom: 0.4rem;
 }
 
-.contact__prompt {
-  margin-bottom: 1.5rem;
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.contact__email {
-  width: 100%;
-  justify-content: space-between;
-}
-
-.contact__email:focus-visible,
-.contact__socials a:focus-visible,
+.contact-link:focus-visible,
 .contact__footer a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
 
-.contact__placeholder {
-  display: block;
-  margin-top: 0.8rem;
-  color: var(--muted);
-  font-size: 0.68rem;
+.contact__channels {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
-.contact__socials {
+.contact-link {
+  position: relative;
   display: grid;
-  margin-top: 2rem;
-  border-top: 1px solid var(--line);
-}
-
-.contact__socials a {
-  display: grid;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.84rem;
-  grid-template-columns: 1fr auto auto;
+  width: 3.6rem;
+  height: 3.6rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
   transition:
-    color 180ms ease,
-    padding 180ms ease;
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
 }
 
-.contact__socials a:hover {
-  padding-left: 0.4rem;
+.contact-link:hover {
+  border-color: rgba(232, 196, 103, 0.38);
+  background: rgba(232, 196, 103, 0.08);
+  transform: translateY(-0.25rem);
+}
+
+.contact-link::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  opacity: 0;
   color: var(--text);
+  background: #11121a;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  text-transform: uppercase;
+  transform: translate(-50%, -0.2rem);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
 }
 
-.contact__socials small {
+.contact-link:hover::after,
+.contact-link:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.contact-link > svg {
+  color: var(--text);
+  transition: color 180ms ease;
+}
+
+.contact-link:hover > svg {
   color: var(--accent);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .contact__footer {
