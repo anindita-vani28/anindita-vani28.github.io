@@ -1175,6 +1175,14 @@ h2 {
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition:
+    opacity 120ms ease 320ms,
+    visibility 0s linear 380ms;
+}
+
+.project-card__front {
+  opacity: 1;
+  visibility: visible;
 }
 
 .project-card__front::after {
@@ -1260,18 +1268,24 @@ h2 {
       transparent 16rem
     ),
     #111625;
+  opacity: 0;
   pointer-events: none;
   transform: rotateY(180deg);
+  visibility: hidden;
 }
 
 .project-card--flip:hover .project-card__front,
 .project-card--flip:focus-within .project-card__front {
+  opacity: 0;
   pointer-events: none;
+  visibility: hidden;
 }
 
 .project-card--flip:hover .project-card__back,
 .project-card--flip:focus-within .project-card__back {
+  opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
 
 .contact {
