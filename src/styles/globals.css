@@ -1288,17 +1288,382 @@ h2 {
   visibility: visible;
 }
 
+.experience {
+  overflow: hidden;
+}
+
+.experience__heading {
+  display: grid;
+  align-items: end;
+  gap: clamp(2rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+}
+
+.experience__heading h2,
+.experience__heading .section__copy {
+  margin-bottom: 0;
+}
+
+.experience__switcher {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.experience__switcher button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 0 1rem;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.experience__switcher button::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 220ms ease;
+}
+
+.experience__switcher button:hover,
+.experience__switcher button:focus-visible,
+.experience__switcher button.is-active {
+  color: var(--text);
+}
+
+.experience__switcher button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+.experience__switcher button.is-active::after {
+  transform: scaleX(1);
+}
+
+.experience__switcher button span {
+  color: var(--accent);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+}
+
+.experience__rail {
+  margin-top: 1.5rem;
+}
+
+.experience__rail-heading {
+  margin-bottom: 1.25rem;
+}
+
+.experience__rail-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.experience__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.15rem 0 1rem;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 0.1rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.experience__track::-webkit-scrollbar {
+  display: none;
+}
+
+.experience__track:focus-visible {
+  outline: 1px solid rgba(232, 196, 103, 0.7);
+  outline-offset: 6px;
+}
+
+.experience__track.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+.experience-card {
+  position: relative;
+  display: flex;
+  min-height: 22rem;
+  flex: 0 0 min(82vw, 29rem);
+  flex-direction: column;
+  padding: clamp(1.4rem, 3vw, 2.25rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      rgba(232, 196, 103, 0.08),
+      transparent 13rem
+    ),
+    rgba(18, 19, 28, 0.66);
+  scroll-snap-align: start;
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
+}
+
+.experience-card:hover {
+  border-color: rgba(232, 196, 103, 0.38);
+  background-color: rgba(24, 25, 36, 0.8);
+  transform: translateY(-0.25rem);
+}
+
+.experience-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.67rem;
+}
+
+.experience-card__topline > span {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.experience-card__organization {
+  margin: 2.5rem 0 0.65rem;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.experience-card h3 {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.experience-card__summary {
+  margin-bottom: 1.35rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.experience-card ul {
+  display: grid;
+  gap: 0.55rem;
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experience-card li {
+  position: relative;
+  padding-left: 1rem;
+  color: #d6d3df;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.experience-card li::before {
+  content: '';
+  position: absolute;
+  top: 0.65em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.experience__rail-footer {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.experience__progress {
+  flex: 1;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.experience__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transition: transform 160ms ease-out;
+}
+
+.experience__rail-footer p {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.experience__rail-footer p span {
+  display: grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border: 1px solid rgba(232, 196, 103, 0.38);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0;
+}
+
 .contact {
-  text-align: center;
+  display: grid;
+  align-items: end;
+  gap: clamp(3rem, 8vw, 7rem);
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
 }
 
 .contact h2 {
-  margin-inline: auto;
+  max-width: 8ch;
 }
 
-.text-link {
+.contact__intro .section__copy {
+  max-width: 42rem;
+}
+
+.contact__availability {
+  display: flex;
+  max-width: 42rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0;
+  color: #d6d3df;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.contact__availability > span {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.42rem;
+  border-radius: 50%;
+  background: #a8f06a;
+  box-shadow: 0 0 0 0.3rem rgba(168, 240, 106, 0.1);
+}
+
+.contact__actions {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(18, 19, 28, 0.72);
+}
+
+.contact__prompt {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.contact__email {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.contact__email:focus-visible,
+.contact__socials a:focus-visible,
+.contact__footer a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.contact__placeholder {
+  display: block;
+  margin-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.contact__socials {
+  display: grid;
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.contact__socials a {
+  display: grid;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.84rem;
+  grid-template-columns: 1fr auto auto;
+  transition:
+    color 180ms ease,
+    padding 180ms ease;
+}
+
+.contact__socials a:hover {
+  padding-left: 0.4rem;
+  color: var(--text);
+}
+
+.contact__socials small {
   color: var(--accent);
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.72rem;
+  grid-column: 1 / -1;
+}
+
+.contact__footer a {
+  transition: color 180ms ease;
+}
+
+.contact__footer a:hover {
+  color: var(--text);
 }
 
 @media (max-width: 900px) {
@@ -1333,6 +1698,21 @@ h2 {
 
   .browser-about__tab.is-open {
     width: clamp(7.5rem, 18vw, 10rem);
+  }
+
+  .experience__heading {
+    align-items: start;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .contact {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .contact__actions {
+    width: min(100%, 34rem);
   }
 }
 
@@ -1433,6 +1813,35 @@ h2 {
 
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .experience__switcher {
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .experience__switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .experience__switcher button {
+    flex: 0 0 auto;
+  }
+
+  .experience-card {
+    min-height: 24rem;
+    flex-basis: 84vw;
+  }
+
+  .experience-card__organization {
+    margin-top: 2rem;
+  }
+
+  .contact__footer {
+    align-items: flex-start;
+    gap: 1rem;
+    flex-direction: column;
   }
 }
 
