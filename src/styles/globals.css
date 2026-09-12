@@ -1064,15 +1064,32 @@ h2 {
 }
 
 .project-card {
+  display: flex;
   min-height: 20rem;
+  flex-direction: column;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   border: 1px solid var(--line);
   border-radius: 1.25rem;
   background: var(--surface);
   backdrop-filter: blur(18px);
+  transition:
+    border-color 220ms ease,
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-card > span,
+.project-card:hover {
+  border-color: rgba(232, 196, 103, 0.35);
+  transform: translateY(-5px);
+}
+
+.project-card__details {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  flex-direction: column;
+}
+
+.project-card__details > span,
 .project-card p {
   color: var(--muted);
 }
@@ -1086,6 +1103,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-bottom: 1.5rem;
   padding: 0;
   list-style: none;
 }
@@ -1096,6 +1114,164 @@ h2 {
   border-radius: 999px;
   color: var(--muted);
   font-size: 0.75rem;
+}
+
+.project-card__link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: auto;
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.project-card__link span {
+  color: var(--accent);
+  transition: transform 180ms ease;
+}
+
+.project-card__link:hover span {
+  transform: translate(2px, -2px);
+}
+
+.project-card--flip {
+  position: relative;
+  min-height: 27rem;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  backdrop-filter: none;
+  perspective: 1400px;
+}
+
+.project-card--flip:hover {
+  border-color: transparent;
+}
+
+.project-card__flipper {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  transition: transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card--flip:hover .project-card__flipper,
+.project-card--flip:focus-within .project-card__flipper {
+  transform: rotateY(180deg);
+}
+
+.project-card__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: #111625;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.project-card__front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 30%, rgba(7, 8, 12, 0.94) 100%),
+    linear-gradient(90deg, rgba(7, 8, 12, 0.2), transparent);
+  pointer-events: none;
+}
+
+.project-card__front img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card--flip:hover .project-card__front img,
+.project-card--flip:focus-within .project-card__front img {
+  transform: scale(1.05);
+}
+
+.project-card__front-copy {
+  position: absolute;
+  z-index: 2;
+  right: clamp(1.5rem, 3vw, 2.5rem);
+  bottom: clamp(1.5rem, 3vw, 2.5rem);
+  left: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.project-card__front-copy > span {
+  color: #a8f06a;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.project-card__front-copy h3 {
+  max-width: 13ch;
+  margin: 0.6rem 0 1.25rem;
+  color: #fff8ed;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.3vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.project-card__front-copy button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  color: #d8d7df;
+  background: transparent;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.project-card__front-copy button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.project-card__front-copy button i {
+  color: var(--accent);
+  font-size: 1rem;
+  font-style: normal;
+}
+
+.project-card__back {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-color: rgba(168, 240, 106, 0.28);
+  background:
+    radial-gradient(
+      circle at 92% 5%,
+      rgba(168, 240, 106, 0.12),
+      transparent 16rem
+    ),
+    #111625;
+  pointer-events: none;
+  transform: rotateY(180deg);
+}
+
+.project-card--flip:hover .project-card__front,
+.project-card--flip:focus-within .project-card__front {
+  pointer-events: none;
+}
+
+.project-card--flip:hover .project-card__back,
+.project-card--flip:focus-within .project-card__back {
+  pointer-events: auto;
 }
 
 .contact {
