@@ -1,4 +1,5 @@
 import pawpalCover from '../assets/pawpal-cover.webp';
+import studentlifeCover from '../assets/studentlife-cover.jpg';
 
 export type Project = {
   title: string;
@@ -22,9 +23,14 @@ export const projects: Project[] = [
     imageAlt: 'A dog, cat, and rabbit together in an energetic studio portrait',
   },
   {
-    title: 'Project Two',
+    title: 'Student Life AI Assistant',
     year: '2026',
-    description: 'A placeholder for another piece of work worth talking about.',
-    technologies: ['Creative Coding', '3D'],
+    description:
+      'An all-in-one student productivity platform for managing courses, tasks, habits, expenses, mood, and academic progress with personalized AI recommendations.',
+    technologies: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind CSS', 'AI'],
+    href: 'https://github.com/anindita-vani28/studentlife-tracer-app',
+    image: studentlifeCover,
+    imageAlt:
+      'A student productivity dashboard displayed on a laptop at a bright university study desk',
   },
 ];
