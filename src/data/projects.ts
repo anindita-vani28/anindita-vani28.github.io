@@ -23,7 +23,7 @@ export const projects: Project[] = [
     imageAlt: 'A dog, cat, and rabbit together in an energetic studio portrait',
   },
   {
-    title: 'Student Life AI Assistant',
+    title: 'Student Life Tracer App',
     year: '2026',
     description:
       'An all-in-one student productivity platform for managing courses, tasks, habits, expenses, mood, and academic progress with personalized AI recommendations.',
