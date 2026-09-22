@@ -1,3 +1,4 @@
+import financialLifeCover from '../assets/financial-life-cover.jpg';
 import pawpalCover from '../assets/pawpal-cover.webp';
 import studentlifeCover from '../assets/studentlife-cover.jpg';
 
@@ -32,5 +33,16 @@ export const projects: Project[] = [
     image: studentlifeCover,
     imageAlt:
       'A student productivity dashboard displayed on a laptop at a bright university study desk',
+  },
+  {
+    title: 'Financial Life Tracker App',
+    year: '2026',
+    description:
+      'An AI-powered platform that brings insurance, claims, credit, taxes, documents, and financial health insights together with predictive alerts and clear explanations.',
+    technologies: ['Next.js', 'NestJS', 'FastAPI', 'PostgreSQL', 'Redis'],
+    href: 'https://github.com/anindita-vani28/AI-Powered-Financial-Life-platform',
+    image: financialLifeCover,
+    imageAlt:
+      'A financial health dashboard displayed on a laptop in a modern home office',
   },
 ];
