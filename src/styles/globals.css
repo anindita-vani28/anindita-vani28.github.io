@@ -1121,11 +1121,41 @@ h2 {
   width: fit-content;
   align-items: center;
   gap: 0.45rem;
-  margin-top: auto;
   color: var(--text);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+.project-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.project-card__flip-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.project-card__flip-back span {
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+.project-card__flip-back:hover,
+.project-card__flip-back:focus-visible {
+  color: var(--text);
 }
 
 .project-card__link span {
@@ -1157,11 +1187,10 @@ h2 {
   width: 100%;
   min-height: inherit;
   transform-style: preserve-3d;
-  transition: transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-card--flip:hover .project-card__flipper,
-.project-card--flip:focus-within .project-card__flipper {
+.project-card--flip.is-flipped .project-card__flipper {
   transform: rotateY(180deg);
 }
 
@@ -1176,11 +1205,12 @@ h2 {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition:
-    opacity 120ms ease 320ms,
-    visibility 0s linear 380ms;
+    opacity 180ms ease 520ms,
+    visibility 0s linear 600ms;
 }
 
 .project-card__front {
+  cursor: pointer;
   opacity: 1;
   visibility: visible;
 }
@@ -1203,8 +1233,7 @@ h2 {
   transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-card--flip:hover .project-card__front img,
-.project-card--flip:focus-within .project-card__front img {
+.project-card--flip.is-flipped .project-card__front img {
   transform: scale(1.05);
 }
 
@@ -1274,15 +1303,13 @@ h2 {
   visibility: hidden;
 }
 
-.project-card--flip:hover .project-card__front,
-.project-card--flip:focus-within .project-card__front {
+.project-card--flip.is-flipped .project-card__front {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
 }
 
-.project-card--flip:hover .project-card__back,
-.project-card--flip:focus-within .project-card__back {
+.project-card--flip.is-flipped .project-card__back {
   opacity: 1;
   pointer-events: auto;
   visibility: visible;
